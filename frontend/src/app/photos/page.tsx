@@ -7,6 +7,7 @@ import {
   Card,
   CardBody,
   CardFooter,
+  CircularProgress,
   Flex,
   FormControl,
   FormLabel,
@@ -26,6 +27,7 @@ import {
 } from "@chakra-ui/react";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
+import toast from "react-hot-toast";
 import useSWR from "swr";
 
 const fetcher = (url: string) => fetch(url).then((res) => res.json());
@@ -36,6 +38,7 @@ export default function Page() {
   const [image, setImage] = useState(null);
   const [comment, setComment] = useState("");
   const [name, setName] = useState(userName);
+  const [isUploading, setIsUploading] = useState(false);
   const { isOpen, onOpen, onClose } = useDisclosure();
   // Load all photos
   const { data, error, isLoading } = useSWR(`${BASE_API_URL}/photo/`, fetcher);
@@ -63,33 +66,62 @@ export default function Page() {
   // Function to add photo
   function handleAddPhoto(e: any) {
     e.preventDefault();
+    setIsUploading(true);
     if (image && name && comment)
-      addPhoto({ image, ownerName: name, ownerComment: comment }).then(
-        (res: any) => {
+      addPhoto({ image, ownerName: name, ownerComment: comment })
+        .then((res: any) => {
           const newPhoto: photoType = res.data;
           setAllPhotos([newPhoto, ...allPhotos]);
+        })
+        .then(() => {
+          toast.success("Upload photo success!");
+          setIsUploading(false);
           onClose();
-        }
-      );
+        })
+        .catch((err) => {
+          toast.error("Upload photo failed!" + err);
+          setIsUploading(false);
+        });
   }
 
-  if (isLoading) return <div>Loading...</div>;
+  if (isLoading)
+    return (
+      <CircularProgress
+        isIndeterminate
+        color="orange.300"
+        size={"8rem"}
+        thickness="1rem"
+        className="mx-auto"
+      />
+    );
   return (
-    <main className="!bg-orange-700 pt-8 h-full w-full overflow-y-scroll">
+    <main className=" pt-8 h-full w-full overflow-y-scroll">
       <div className="px-4 mb-4 flex flex-row justify-between items-center gap-8">
-        <Text fontSize="xl" as="b" textAlign={"center"} display={"block"}>
+        <Button
+          size={"lg"}
+          rightIcon={<span>👋</span>}
+          colorScheme="gray"
+          border={"2px"}
+          borderColor={"black"}
+          className="!px-8"
+        >
           Hello {userName}, find your interest photo and share your thought!
-        </Text>{" "}
+        </Button>
+        {/* <Text fontSize="xl" as="b" textAlign={"center"} display={"block"}>
+          Hello {userName}, find your interest photo and share your thought!
+        </Text> */}
         <Button
           size={"lg"}
           rightIcon={<Icon as={EditIcon} />}
-          colorScheme="yellow"
-          _hover={{ bg: "#fbd7c0" }}
-          _active={{
-            bg: "#fe6509",
-            transform: "scale(0.98)",
-            borderColor: "black",
-          }}
+          colorScheme="purple"
+          // _hover={{ bg: "#fbd7c0" }}
+          // _active={{
+          //   bg: "#fe6509",
+          //   transform: "scale(0.98)",
+          //   borderColor: "black",
+          // }}
+          border={"2px"}
+          borderColor={"black"}
           className="!px-8"
           onClick={onOpen}
         >
@@ -140,7 +172,11 @@ export default function Page() {
                   }
                   colorScheme="black"
                   variant="outline"
-                  _hover={{ bg: "#fbd7c0" }}
+                  _hover={{
+                    bg: "#fbd7c0",
+                    transform: "scale(1.1)",
+                    transition: "transform 0.5s",
+                  }}
                   _active={{
                     bg: "#fe6509",
                     transform: "scale(0.98)",
@@ -191,10 +227,25 @@ export default function Page() {
                 </FormControl>
 
                 <Flex justify="flex-end" mt={4}>
-                  <Button colorScheme="blue" type="submit">
+                  <Button
+                    colorScheme="blue"
+                    type="submit"
+                    width={"100%"}
+                    bgColor={"orange.500"}
+                    isLoading={isUploading}
+                  >
                     Submit
                   </Button>
                 </Flex>
+                {image && (
+                  <Flex justify="center" mt={4}>
+                    <Image
+                      src={URL.createObjectURL(image)}
+                      alt="preview"
+                      width={"160px"}
+                    />
+                  </Flex>
+                )}
               </form>
             </ModalBody>
           </ModalContent>

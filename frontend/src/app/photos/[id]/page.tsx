@@ -6,6 +6,7 @@ import {
   Button,
   Card,
   CardHeader,
+  CircularProgress,
   Divider,
   Heading,
   Icon,
@@ -21,11 +22,11 @@ const fetcher = (url: string) => fetch(url).then((res) => res.json());
 
 export default function Page({ params }: { params: { id: string } }) {
   const [photoDetail, setPhotoDetail] = useState<any>(null); // State to store photo detail
+  const [isAddComment, setIsAddComment] = useState(false); // State to store add comment form status
   const { data, error, isLoading } = useSWR(
     `${BASE_API_URL}/photo/${params.id}`,
     fetcher
   );
-
   useEffect(() => {
     setPhotoDetail(data?.data);
   }, [data]);
@@ -34,6 +35,8 @@ export default function Page({ params }: { params: { id: string } }) {
   async function handleAddComment(
     e: React.ChangeEvent<HTMLInputElement> | any
   ) {
+    setIsAddComment(true);
+
     e.preventDefault(); // Prevent form submit
     const userName = await localStorage.getItem("userName");
     // Get form comment value
@@ -45,7 +48,7 @@ export default function Page({ params }: { params: { id: string } }) {
     });
 
     if (res?.status === 200) {
-      console.log(res);
+      setIsAddComment(false);
       setPhotoDetail({
         ...photoDetail,
         comments: [
@@ -64,7 +67,16 @@ export default function Page({ params }: { params: { id: string } }) {
     e.target.reset();
   }
 
-  if (isLoading) return <div>Loading...</div>;
+  if (isLoading)
+    return (
+      <CircularProgress
+        isIndeterminate
+        color="orange.300"
+        size={"8rem"}
+        thickness="1rem"
+        className="mx-auto"
+      />
+    );
 
   return (
     <Card className="max-w-2xl h-[90%] bg-orange-800 p-4">
@@ -82,7 +94,7 @@ export default function Page({ params }: { params: { id: string } }) {
           alt={photoDetail?.image}
           className="col-span-1   group-hover:transform group-hover:scale-110 transition duration-300 ease-in-out"
         />
-        <Text fontSize="sm" display={"block"} className="col-span-2 ">
+        <Text fontSize="sm" display={"block"} className="col-span-2">
           {photoDetail?.ownerComment || "No comment"}
         </Text>
       </div>
@@ -92,7 +104,21 @@ export default function Page({ params }: { params: { id: string } }) {
         <>
           <form onSubmit={handleAddComment}>
             <Text mb="8px">Leave your comment: </Text>
-            <Input placeholder="Leave your comment here!" size="sm" />
+            <div className="relative">
+              <Input
+                placeholder="Leave your comment here!"
+                size="sm"
+                isDisabled={isAddComment}
+              />
+              {isAddComment && (
+                <CircularProgress
+                  isIndeterminate
+                  color="green.300"
+                  size={"1rem"}
+                  className="absolute left-[97%] bottom-[30px] transform -translate-x-1/2"
+                />
+              )}
+            </div>
           </form>
         </>
       </div>
