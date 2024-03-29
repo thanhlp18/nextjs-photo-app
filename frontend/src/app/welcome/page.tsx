@@ -71,7 +71,7 @@ export default function Page() {
             className="hover:transform hover:scale-110 transition duration-300 ease-in-out w-fit mt-4"
             onClick={handleAddUserName}
           >
-            Let's start
+            Start!
           </Button>
         </FormControl>
       </div>
