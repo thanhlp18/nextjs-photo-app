@@ -14,4 +14,4 @@
 ## Demo:
 
 - **Demo Video**: Check out the demo video [here](https://youtu.be/gtj9BFNyvFg).
-- **Live Demo**: Access the live demo [here](https://nextjs-photo-64l7wuhzp-thanhlp18s-projects.vercel.app/).
+- **Live Demo**: Access the live demo [here](https://nextjs-photo-app-three.vercel.app/).
