@@ -1,5 +1,5 @@
 const { Photo, Comment } = require("../model/model");
-const BASE_API_URL = "https://nextjs-photo-app.onrender.com/";
+const BASE_API_URL = "https://nextjs-photo-app.onrender.com";
 
 const photoController = {
   // ADD PHOTO
