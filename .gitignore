@@ -2,6 +2,9 @@
 
 # dependencies
 /node_modules
+backend/node_modules
+frontend/node_modules
+*/node_modules
 /.pnp
 .pnp.js
 .yarn/install-state.gz
@@ -11,10 +14,11 @@
 
 # next.js
 /.next/
+*/.next/
 /out/
 
 # production
-/build
+*/build
 
 # misc
 .DS_Store
