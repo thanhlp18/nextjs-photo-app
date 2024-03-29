@@ -1,4 +1,5 @@
 const { Photo, Comment } = require("../model/model");
+const BASE_API_URL = "https://nextjs-photo-app.onrender.com/v1";
 
 const photoController = {
   // ADD PHOTO
@@ -12,7 +13,7 @@ const photoController = {
       const savedPhoto = await newPhoto.save();
       const cleanedPhoto = {
         id: savedPhoto._id,
-        image: `http://localhost:8000/${savedPhoto.image}`,
+        image: `${BASE_API_URL}/${savedPhoto.image}`,
         ownerName: savedPhoto.ownerName,
         ownerComment: savedPhoto.ownerComment,
         comments: await Promise.all(
@@ -44,7 +45,7 @@ const photoController = {
           return {
             id: photo._id,
             ...photoDataWithoutComments,
-            image: `http://localhost:8000/${photo.image}`,
+            image: `${BASE_API_URL}/${photo.image}`,
             commentsCount: commentsCount,
           };
         })
@@ -68,7 +69,7 @@ const photoController = {
 
       const cleanedPhoto = {
         id: photo._id,
-        image: `http://localhost:8000/${photo.image}`,
+        image: `${BASE_API_URL}/${photo.image}`,
         ownerName: photo.ownerName,
         ownerComment: photo.ownerComment,
         comments: await Promise.all(
