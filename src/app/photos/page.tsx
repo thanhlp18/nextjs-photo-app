@@ -33,7 +33,7 @@ import useSWR from "swr";
 const fetcher = (url: string) => fetch(url).then((res) => res.json());
 export default function Page() {
   const router = useRouter();
-  const [allPhotos, setAllPhotos] = useState<photoType[]>([]); // State to store all photos
+  const [allPhotos, setAllPhotos] = useState<getAllPhotosResponse[]>([]); // State to store all photos
   const [userName, setUserName] = useState(""); // State to store user name
   const [image, setImage] = useState(null);
   const [comment, setComment] = useState("");
@@ -41,7 +41,7 @@ export default function Page() {
   const [isUploading, setIsUploading] = useState(false);
   const { isOpen, onOpen, onClose } = useDisclosure();
   // Load all photos
-  const { data, error, isLoading } = useSWR(`${BASE_API_URL}/photo/`, fetcher);
+  const { data, error, isLoading } = useSWR(`${BASE_API_URL}/photos/`, fetcher);
 
   // Set user name from local storage
   useEffect(() => {
@@ -70,7 +70,7 @@ export default function Page() {
     if (image && name && comment)
       addPhoto({ image, ownerName: name, ownerComment: comment })
         .then((res: any) => {
-          const newPhoto: photoType = res.data;
+          const newPhoto: getAllPhotosResponse = res.data;
           setAllPhotos([newPhoto, ...allPhotos]);
         })
         .then(() => {
@@ -94,6 +94,7 @@ export default function Page() {
         className="mx-auto"
       />
     );
+  console.log(allPhotos);
   return (
     <main className=" pt-8 h-full w-full overflow-y-scroll">
       <div className="px-4 mb-4 flex flex-row justify-between items-center gap-8">
@@ -131,7 +132,11 @@ export default function Page() {
       <div className="grid grid-cols-3 lg:grid-cols-4 gap-3 px-4">
         {allPhotos?.map((photo: getAllPhotosResponse, idx: number) => (
           // Photo card
-          <Card maxW="md" key={photo.id} className="overflow-hidden !min-w-56">
+          <Card
+            maxW="md"
+            key={photo.photoId}
+            className="overflow-hidden !min-w-56"
+          >
             <Image
               objectFit="cover"
               src={photo.image}
@@ -183,7 +188,7 @@ export default function Page() {
                     borderColor: "black",
                   }}
                   className="w-full mt-4"
-                  onClick={() => handleViewAllComment(photo.id)}
+                  onClick={() => handleViewAllComment(photo.photoId)}
                 >
                   View all comment
                 </Button>

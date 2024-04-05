@@ -1,5 +1,5 @@
 type getAllPhotosResponse = {
-  id: string;
+  photoId: string;
   image: string;
   ownerName: string;
   ownerComment: string;

@@ -39,12 +39,11 @@ export async function addPhoto(photo: {
     formData.append("ownerName", ownerName);
     formData.append("ownerComment", ownerComment);
 
-    const response = await axios.post(`${BASE_API_URL}/photo`, formData, {
+    const response = await axios.post(`${BASE_API_URL}/photos`, formData, {
       headers: {
         "Content-Type": "multipart/form-data",
       },
     });
-    console.log(response.data);
     return response.data; // Return the response data if needed
   } catch (error) {
     console.error("Error uploading image and comment:", error);

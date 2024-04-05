@@ -24,7 +24,7 @@ export default function Page({ params }: { params: { id: string } }) {
   const [photoDetail, setPhotoDetail] = useState<any>(null); // State to store photo detail
   const [isAddComment, setIsAddComment] = useState(false); // State to store add comment form status
   const { data, error, isLoading } = useSWR(
-    `${BASE_API_URL}/photo/${params.id}`,
+    `${BASE_API_URL}/photos/${params.id}`,
     fetcher
   );
   useEffect(() => {

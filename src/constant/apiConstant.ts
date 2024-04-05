@@ -1,1 +1,1 @@
-export const BASE_API_URL = "https://nextjs-photo-app.onrender.com/v1";
+export const BASE_API_URL = "http://localhost:3000/api";
