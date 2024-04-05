@@ -1,5 +1,5 @@
 "use client";
-import { addComment } from "@/api/photoApi";
+import { addComment } from "@/app/api/photoApi";
 import { BASE_API_URL } from "@/constant/apiConstant";
 import { ChevronLeftIcon } from "@chakra-ui/icons";
 import {

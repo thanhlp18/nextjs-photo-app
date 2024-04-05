@@ -1,5 +1,5 @@
 "use client";
-import { addPhoto } from "@/api/photoApi";
+import { addPhoto } from "@/app/api/photoApi";
 import { BASE_API_URL } from "@/constant/apiConstant";
 import { ChatIcon, EditIcon } from "@chakra-ui/icons";
 import {
