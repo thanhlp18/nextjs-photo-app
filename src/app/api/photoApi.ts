@@ -9,19 +9,15 @@ export function getAllPhotos(): { id: string; url: string }[] {
   return [];
 }
 
-// ADD COMMENT
-export function addComment(comment: {
-  name: string;
-  comment: string;
-  photoId: string;
-}) {
+export async function getPhotoById(photoId: string) {
   return axios
-    .post(`${BASE_API_URL}/comment/`, comment)
+    .get(`${BASE_API_URL}/photos/${photoId}`)
     .then((response) => {
-      return { ...response.data, status: response.status };
+      return response.data;
     })
     .catch((error) => {
-      throw error; // Rethrow the error to be handled elsewhere
+      console.error("Error fetching photo by ID:", error);
+      return { error: error.message };
     });
 }
 
@@ -49,4 +45,20 @@ export async function addPhoto(photo: {
     console.error("Error uploading image and comment:", error);
     throw error; // Rethrow the error to handle it elsewhere
   }
+}
+
+// ADD COMMENT
+export function addComment(comment: {
+  name: string;
+  comment: string;
+  photoId: string;
+}) {
+  return axios
+    .post(`${BASE_API_URL}/comment/`, comment)
+    .then((response) => {
+      return { ...response.data, status: response.status };
+    })
+    .catch((error) => {
+      throw error; // Rethrow the error to be handled elsewhere
+    });
 }

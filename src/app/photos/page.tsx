@@ -37,7 +37,6 @@ export default function Page() {
   const [userName, setUserName] = useState(""); // State to store user name
   const [image, setImage] = useState(null);
   const [comment, setComment] = useState("");
-  const [name, setName] = useState(userName);
   const [isUploading, setIsUploading] = useState(false);
   const { isOpen, onOpen, onClose } = useDisclosure();
   // Load all photos
@@ -67,8 +66,8 @@ export default function Page() {
   function handleAddPhoto(e: any) {
     e.preventDefault();
     setIsUploading(true);
-    if (image && name && comment)
-      addPhoto({ image, ownerName: name, ownerComment: comment })
+    if (image && userName && comment)
+      addPhoto({ image, ownerName: userName, ownerComment: comment })
         .then((res: any) => {
           const newPhoto: getAllPhotosResponse = res.data;
           setAllPhotos([newPhoto, ...allPhotos]);
@@ -139,8 +138,8 @@ export default function Page() {
           >
             <Image
               objectFit="cover"
-              src={photo.image}
-              alt={photo.image}
+              src={`${photo.image}/thumbnail`}
+              alt={`${photo.ownerName} | ${photo.ownerComment}`}
               aspectRatio={1}
             />
             <CardBody>
@@ -209,8 +208,8 @@ export default function Page() {
                   <FormLabel>Your Name</FormLabel>
                   <Input
                     type="text"
-                    value={name || ""}
-                    onChange={(e) => setName(e.target.value)}
+                    value={userName}
+                    onChange={(e) => setUserName(e.target.value)}
                   />
                 </FormControl>
 

@@ -1,6 +1,5 @@
 "use client";
-import { addComment } from "@/app/api/photoApi";
-import { BASE_API_URL } from "@/constant/apiConstant";
+import { addComment, getPhotoById } from "@/app/api/photoApi";
 import { ChevronLeftIcon } from "@chakra-ui/icons";
 import {
   Button,
@@ -14,22 +13,34 @@ import {
   Input,
   Text,
 } from "@chakra-ui/react";
-import Comment from "postcss/lib/comment";
 import { useEffect, useState } from "react";
-import useSWR from "swr";
+import toast from "react-hot-toast";
 
 const fetcher = (url: string) => fetch(url).then((res) => res.json());
 
 export default function Page({ params }: { params: { id: string } }) {
   const [photoDetail, setPhotoDetail] = useState<any>(null); // State to store photo detail
   const [isAddComment, setIsAddComment] = useState(false); // State to store add comment form status
-  const { data, error, isLoading } = useSWR(
-    `${BASE_API_URL}/photos/${params.id}`,
-    fetcher
-  );
+  const [isLoading, setIsLoading] = useState(true);
+  // const { data, error, isLoading } = useSWR(
+  //   `${BASE_API_URL}/photos/${params.id}`,
+  //   fetcher
+  // );
   useEffect(() => {
-    setPhotoDetail(data?.data);
-  }, [data]);
+    getPhotoById(params.id)
+      .then((res) => {
+        setPhotoDetail(res.data);
+        setIsLoading(false);
+      })
+      .catch((error) => {
+        toast.error("Error fetching photo detail: " + error.message);
+      });
+
+    // Cleanup function (optional)
+    return () => {
+      // Any cleanup logic here
+    };
+  }, [params.id]); // Dependency array
 
   // Function to add comment
   async function handleAddComment(
@@ -90,8 +101,8 @@ export default function Page({ params }: { params: { id: string } }) {
       <div className="grid grid-cols-3 gap-4 group ">
         <Image
           objectFit="cover"
-          src={photoDetail?.image}
-          alt={photoDetail?.image}
+          src={`${photoDetail?.image}/public`}
+          alt={`${photoDetail?.ownerName} | ${photoDetail?.ownerComment}`}
           className="col-span-1   group-hover:transform group-hover:scale-110 transition duration-300 ease-in-out"
         />
         <Text fontSize="sm" display={"block"} className="col-span-2">
