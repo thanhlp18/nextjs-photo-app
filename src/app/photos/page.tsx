@@ -70,7 +70,7 @@ export default function Page() {
       addPhoto({ image, ownerName: userName, ownerComment: comment })
         .then((res: any) => {
           const newPhoto: getAllPhotosResponse = res.data;
-          setAllPhotos([newPhoto, ...allPhotos]);
+          setAllPhotos([{ ...newPhoto, photoId: newPhoto._id }, ...allPhotos]);
         })
         .then(() => {
           toast.success("Upload photo success!");
@@ -93,7 +93,6 @@ export default function Page() {
         className="mx-auto"
       />
     );
-  console.log(allPhotos);
   return (
     <main className=" pt-8 h-full w-full overflow-y-scroll">
       <div className="px-4 mb-4 flex flex-row justify-between items-center gap-8">
