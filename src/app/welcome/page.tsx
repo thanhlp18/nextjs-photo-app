@@ -61,8 +61,10 @@ export default function Page() {
             isRequired
             onChange={(e) => setUserName(e.target.value)}
             onKeyDown={(e) => {
-              setIsLoading(true);
-              if (e.key === "Enter") handleAddUserName();
+              if (e.key === "Enter") {
+                setIsLoading(true);
+                handleAddUserName();
+              }
             }}
           />
           <Button
