@@ -3,12 +3,6 @@ import clientPromise from "../../lib/mongodb";
 import { NextApiRequest } from "next";
 import axios from "axios";
 
-export const config = {
-  api: {
-    bodyParser: false,
-  },
-};
-
 async function uploadToCloudflare(imageData: FormDataEntryValue) {
   try {
     const formData = new FormData();
