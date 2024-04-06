@@ -1,6 +1,13 @@
 // app/page.tsx
 "use client";
-import { Button, FormControl, FormLabel, Input, Text } from "@chakra-ui/react";
+import {
+  Button,
+  CircularProgress,
+  FormControl,
+  FormLabel,
+  Input,
+  Text,
+} from "@chakra-ui/react";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
@@ -9,19 +16,22 @@ import toast from "react-hot-toast";
 export default function Page() {
   const router = useRouter();
   const [userName, setUserName] = useState("");
+  const [isLoading, setIsLoading] = useState(false);
 
   function handleAddUserName() {
     if (userName === "") {
       toast.error("Please enter your name");
+      setIsLoading(false);
       return;
     }
     localStorage.setItem("userName", userName);
     toast.success("Hello " + userName);
+    setIsLoading(false);
     router.push("/photos");
   }
 
   return (
-    <main className="bg-transparent max-w-4xl min-w-96 group">
+    <main className="bg-transparent max-w-4xl min-w-36 sm:min-w-72 lg:min-w-96 group">
       <div className=" bg-yellow-100 p-8 rounded-md border-2 border-solid border-black">
         <div className="mb-4 flex flex-col justify-center gap-3">
           <Image
@@ -51,6 +61,7 @@ export default function Page() {
             isRequired
             onChange={(e) => setUserName(e.target.value)}
             onKeyDown={(e) => {
+              setIsLoading(true);
               if (e.key === "Enter") handleAddUserName();
             }}
           />
@@ -68,9 +79,22 @@ export default function Page() {
               borderColor: "black",
             }}
             className="hover:transform hover:scale-110 transition duration-300 ease-in-out w-fit mt-4"
-            onClick={handleAddUserName}
+            disabled={isLoading}
+            onClick={() => {
+              setIsLoading(true);
+              handleAddUserName();
+            }}
           >
-            Start!
+            {!isLoading ? (
+              " Start!"
+            ) : (
+              <CircularProgress
+                isIndeterminate
+                color="white"
+                size={"1rem"}
+                className="ml-2"
+              />
+            )}
           </Button>
         </FormControl>
       </div>

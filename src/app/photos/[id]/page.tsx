@@ -91,21 +91,35 @@ export default function Page({ params }: { params: { id: string } }) {
 
   return (
     <Card className="max-w-2xl h-[90%] bg-orange-800 p-4">
-      <CardHeader>
-        <Heading size="md">
-          {"Photo uploaded by " + photoDetail?.ownerName}
+      <CardHeader className="!px-0">
+        <Heading
+          size="md"
+          className="flex sm:flex-row flex-col-reverse justify-between gap-2"
+        >
+          <span> {"Photo uploaded by " + photoDetail?.ownerName}</span>
+
+          <Button
+            colorScheme="orange"
+            size="sm"
+            className=""
+            leftIcon={<Icon as={ChevronLeftIcon} />}
+            onClick={() => window.history.back()}
+          >
+            Back
+          </Button>
         </Heading>
       </CardHeader>
 
       {/* Image detail block */}
-      <div className="grid grid-cols-3 gap-4 group ">
+      <div className="grid grid-cols-1 gap-4 group ">
         <Image
           objectFit="cover"
           src={`${photoDetail?.image}/public`}
           alt={`${photoDetail?.ownerName} | ${photoDetail?.ownerComment}`}
-          className="col-span-1   group-hover:transform group-hover:scale-110 transition duration-300 ease-in-out"
+          className="col-span-1 group-hover:transform group-hover:scale-105 transition duration-300 ease-in-out rounded-md"
         />
-        <Text fontSize="sm" display={"block"} className="col-span-2">
+        <Text fontSize="sm" display={"block"} className="col-span-1">
+          <span className="font-bold">{photoDetail?.ownerName}</span>:{" "}
           {photoDetail?.ownerComment || "No comment"}
         </Text>
       </div>
@@ -146,16 +160,6 @@ export default function Page({ params }: { params: { id: string } }) {
           </li>
         ))}
       </ul>
-
-      <Button
-        colorScheme="orange"
-        size="sm"
-        className=" !absolute right-4 top-4"
-        leftIcon={<Icon as={ChevronLeftIcon} />}
-        onClick={() => window.history.back()}
-      >
-        Back
-      </Button>
     </Card>
   );
 }

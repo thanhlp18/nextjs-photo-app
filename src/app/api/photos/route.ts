@@ -13,7 +13,7 @@ async function uploadToCloudflare(imageData: FormDataEntryValue) {
       formData,
       {
         headers: {
-          Authorization: "Bearer xyNzDn3HEv0gSH9V2Ba9Ti7LmaFpkxvRYzHQxseW",
+          Authorization: `Bearer ${process.env.CLOUDFLARE_API_TOKEN}`,
           "Content-Type": "multipart/form-data", // Set content type to multipart/form-data
         },
       }

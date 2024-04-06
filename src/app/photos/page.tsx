@@ -69,8 +69,10 @@ export default function Page() {
     if (image && userName && comment)
       addPhoto({ image, ownerName: userName, ownerComment: comment })
         .then((res: any) => {
-          const newPhoto: getAllPhotosResponse = res.data;
-          setAllPhotos([{ ...newPhoto, photoId: newPhoto._id }, ...allPhotos]);
+          const newPhoto = res.data;
+          newPhoto.photoId = newPhoto._id;
+          delete newPhoto._id;
+          setAllPhotos([...allPhotos, newPhoto]);
         })
         .then(() => {
           toast.success("Upload photo success!");
@@ -95,107 +97,105 @@ export default function Page() {
     );
   return (
     <main className=" pt-8 h-full w-full overflow-y-scroll">
-      <div className="px-4 mb-4 flex flex-row justify-between items-center gap-8">
+      <div className="px-4 mb-4 flex sm:flex-row flex-col justify-between items-center gap-4 sm:gap-8">
         <Button
           size={"lg"}
-          rightIcon={<span>👋</span>}
           colorScheme="gray"
           border={"2px"}
           borderColor={"black"}
-          className="!px-8"
+          className="!px-4 !py-2   !h-fit sm:w-fit w-full"
         >
-          Hello {userName}, find your interest photo and share your thought!
+          <span className="text-wrap text-base leading-5  ">
+            Hello {userName}, find your interest photo and share your thought!
+            👋
+          </span>
         </Button>
-        {/* <Text fontSize="xl" as="b" textAlign={"center"} display={"block"}>
-          Hello {userName}, find your interest photo and share your thought!
-        </Text> */}
+
         <Button
           size={"lg"}
           rightIcon={<Icon as={EditIcon} />}
           colorScheme="purple"
-          // _hover={{ bg: "#fbd7c0" }}
-          // _active={{
-          //   bg: "#fe6509",
-          //   transform: "scale(0.98)",
-          //   borderColor: "black",
-          // }}
           border={"2px"}
           borderColor={"black"}
-          className="!px-8"
+          className="!px-4 !py-2 !h-fit sm:w-fit w-full"
           onClick={onOpen}
         >
-          Share your photo here
+          <span className="text-wrap text-base leading-5">
+            Share your photo here
+          </span>
         </Button>
       </div>
-      <div className="grid grid-cols-3 lg:grid-cols-4 gap-3 px-4">
-        {allPhotos?.map((photo: getAllPhotosResponse, idx: number) => (
-          // Photo card
-          <Card
-            maxW="md"
-            key={photo.photoId}
-            className="overflow-hidden !min-w-56"
-          >
-            <Image
-              objectFit="cover"
-              src={`${photo.image}/thumbnail`}
-              alt={`${photo.ownerName} | ${photo.ownerComment}`}
-              aspectRatio={1}
-            />
-            <CardBody>
-              <div>
-                <Heading size="sm">{photo.ownerName}</Heading>
-                <Text fontSize="sm" display={"block"}>
-                  {photo.ownerComment || "No comment"}
-                </Text>
-              </div>
-            </CardBody>
-            <CardFooter
-              justify="space-between"
-              flexWrap="wrap"
-              sx={{
-                "& > button": {
-                  minW: "136px",
-                },
-              }}
+      <div className="grid  grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3 px-4 grid-flow-row-dense">
+        {allPhotos
+          ?.toReversed()
+          .map((photo: getAllPhotosResponse, idx: number) => (
+            // Photo card
+            <Card
+              maxW="md"
+              key={photo.photoId}
+              className="overflow-hidden !min-w-56 !w-full mx-auto"
             >
-              <div className="flex flex-row flex-nowrap justify-center items-center w-full">
-                <Button
-                  size={"sm"}
-                  rightIcon={
-                    <div className="flex flex-row gap-1">
-                      <Icon as={ChatIcon} />
-                      <Text
-                        fontSize="sm"
-                        textAlign={"center"}
-                        display={"block"}
-                      >
-                        {photo.commentsCount}
-                      </Text>
-                    </div>
-                  }
-                  colorScheme="black"
-                  variant="outline"
-                  _hover={{
-                    bg: "#fbd7c0",
-                    transform: "scale(1.1)",
-                    transition: "transform 0.5s",
-                  }}
-                  _active={{
-                    bg: "#fe6509",
-                    transform: "scale(0.98)",
-                    borderColor: "black",
-                  }}
-                  className="w-full mt-4"
-                  onClick={() => handleViewAllComment(photo.photoId)}
-                >
-                  View all comment
-                </Button>
+              <Image
+                objectFit="cover"
+                src={`${photo.image}/thumbnail`}
+                alt={`${photo.ownerName} | ${photo.ownerComment}`}
+                aspectRatio={1}
+              />
+              <CardBody>
+                <div>
+                  <Heading size="sm">{photo.ownerName}</Heading>
+                  <Text fontSize="sm" display={"block"}>
+                    {photo.ownerComment || "No comment"}
+                  </Text>
+                </div>
+              </CardBody>
+              <CardFooter
+                justify="space-between"
+                flexWrap="wrap"
+                sx={{
+                  "& > button": {
+                    minW: "136px",
+                  },
+                }}
+              >
+                <div className="flex flex-row flex-nowrap justify-center items-center w-full">
+                  <Button
+                    size={"sm"}
+                    rightIcon={
+                      <div className="flex flex-row gap-1">
+                        <Icon as={ChatIcon} />
+                        <Text
+                          fontSize="sm"
+                          textAlign={"center"}
+                          display={"block"}
+                        >
+                          {photo.commentsCount}
+                        </Text>
+                      </div>
+                    }
+                    colorScheme="black"
+                    variant="outline"
+                    _hover={{
+                      bg: "#fbd7c0",
+                      transform: "scale(1.1)",
+                      transition: "transform 0.5s",
+                    }}
+                    _active={{
+                      bg: "#fe6509",
+                      transform: "scale(0.98)",
+                      borderColor: "black",
+                    }}
+                    className="w-full mt-4"
+                    onClick={() => handleViewAllComment(photo.photoId)}
+                  >
+                    View all comment
+                  </Button>
 
-                <></>
-              </div>
-            </CardFooter>
-          </Card>
-        ))}
+                  <></>
+                </div>
+              </CardFooter>
+            </Card>
+          ))}
         <Modal onClose={onClose} isOpen={isOpen} isCentered>
           <ModalOverlay />
           <ModalContent className="md:h-[90%] h-full flex flex-col overflow-hidden ">
