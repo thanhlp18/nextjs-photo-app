@@ -1,1 +1,2 @@
-export const BASE_API_URL = "http://localhost:3000/api";
+export const BASE_API_URL =
+  "nextjs-photo-app-git-main-thanhlp18s-projects.vercel.app/api";
