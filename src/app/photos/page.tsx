@@ -144,7 +144,11 @@ export default function Page() {
               <CardBody>
                 <div>
                   <Heading size="sm">{photo.ownerName}</Heading>
-                  <Text fontSize="sm" display={"block"}>
+                  <Text
+                    fontSize="sm"
+                    display={"block"}
+                    className="!line-clamp-4"
+                  >
                     {photo.ownerComment || "No comment"}
                   </Text>
                 </div>

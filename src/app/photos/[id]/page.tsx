@@ -90,7 +90,7 @@ export default function Page({ params }: { params: { id: string } }) {
     );
 
   return (
-    <Card className="max-w-2xl h-[90%] bg-orange-800 p-4">
+    <Card className="max-w-2xl h-[90%] bg-orange-800 p-4 overflow-y-scroll">
       <CardHeader className="!px-0">
         <Heading
           size="md"
@@ -148,7 +148,7 @@ export default function Page({ params }: { params: { id: string } }) {
         </>
       </div>
       {/* Comment render block */}
-      <ul className=" mt-2 gap-2 overflow-y-scroll">
+      <ul className=" mt-2 gap-2">
         {photoDetail?.comments?.map((ele: commentType, index: number) => (
           <li key={index} className="border-t">
             <div>
